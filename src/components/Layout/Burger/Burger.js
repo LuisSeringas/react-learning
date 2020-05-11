@@ -19,8 +19,6 @@ const Burger = (props) => {
         []
     );
 
-    console.log(list); //push at the end unshift at beginning
-
     if (list.length === 0) {
         list = (<h2>Your Burger does not have any ingredient</h2>)
     }

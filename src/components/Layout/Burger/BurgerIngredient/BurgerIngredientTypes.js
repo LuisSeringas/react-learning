@@ -28,21 +28,27 @@ const BurgerIngredientTypes = {
     properties: {
         topBread: {
             representation: topBread,
+            price: 0.5,
         },
         bottomBread: {
             representation: bottomBread,
+            price: 0.5,
         },
         meat: {
             representation: meat,
+            price: 2.4,
         },
         cheese: {
             representation: cheese,
+            price: 1.3,
         },
         bacon: {
             representation: bacon,
+            price: 1.3,
         },
         salad: {
             representation: salad,
+            price: 1.3,
         },
     },
 };
