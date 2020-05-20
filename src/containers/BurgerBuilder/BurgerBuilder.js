@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 
 import Aux from '../../hoc/aux';
-import Burger from '../../components/Layout/Burger/Burger';
-import BuildControls from '../../components/Layout/Burger/BuildControls/BuildControls';
-import BurgerIngredientTypes from '../../components/Layout/Burger/BurgerIngredient/BurgerIngredientTypes';
+import Burger from '../../components/Burger/Burger';
+import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import BurgerIngredientTypes from '../../components/Burger/BurgerIngredient/BurgerIngredientTypes';
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
 class BurgerBuilder extends Component {
     constructor(props) {
@@ -22,6 +24,7 @@ class BurgerBuilder extends Component {
             BurgerIngredientTypes.properties['topBread'].price +
             BurgerIngredientTypes.properties['bottomBread'].price,
         purchasable: false,
+        onPurchase: false,
     };
 
     static getDerivedStateFromProps() {
@@ -36,6 +39,10 @@ class BurgerBuilder extends Component {
     componentDidUpdate() {
         console.log('[BurguerBuilder.js] ComponentDidUpdate');
     }
+
+    purchaseHandler = () => {
+        this.setState({ onPurchase: true });
+    };
 
     updatePurchaseState = (updatedIngredients) => {
         const totalIngredients = Object.keys(updatedIngredients).reduce(
@@ -54,20 +61,6 @@ class BurgerBuilder extends Component {
             '-----------------------------------------------------------'
         );
 
-        /*         this.setState((prevState, props) => {
-            const updatedIngredients = {
-                ...prevState.ingredients,
-            };
-
-            updatedIngredients[type] = prevState.ingredients[type] + 1;
-
-            const totalPrice =
-                prevState.totalPrice +
-                BurgerIngredientTypes.properties[type].price;
-
-            return { ingredients: updatedIngredients, totalPrice: totalPrice };
-        });
- */
         const updatedIngredients = {
             ...this.state.ingredients,
         };
@@ -87,7 +80,6 @@ class BurgerBuilder extends Component {
     };
 
     removeIngredientHandler = (type) => {
-        
         const updatedIngredients = {
             ...this.state.ingredients,
         };
@@ -110,6 +102,13 @@ class BurgerBuilder extends Component {
         this.updatePurchaseState(updatedIngredients);
     };
 
+    cancelPurchaseHandler = () => {
+        this.setState({ onPurchase: false });
+    };
+
+    confirmationHandler = () => {
+        alert('Your number is xxx, Waiting for your turn');
+    }
     render() {
         const disableInfo = {
             ...this.state.ingredients,
@@ -121,6 +120,17 @@ class BurgerBuilder extends Component {
 
         return (
             <Aux>
+                <Modal
+                    isOnPurchase={this.state.onPurchase}
+                    closeModalHandler={this.cancelPurchaseHandler}
+                >
+                    <OrderSummary 
+                    ingredients={this.state.ingredients}
+                    totalPrice={this.state.totalPrice}
+                    confirmationHandler={this.confirmationHandler}
+                    cancelHandler={this.cancelPurchaseHandler}
+                    />
+                </Modal>
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls
                     totalPrice={this.state.totalPrice}
@@ -128,6 +138,7 @@ class BurgerBuilder extends Component {
                     removeIngredientHandler={this.removeIngredientHandler}
                     disableControls={disableInfo}
                     isPurchasable={this.state.purchasable}
+                    purchaseHandler={this.purchaseHandler}
                 />
             </Aux>
         );

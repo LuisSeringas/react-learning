@@ -1,0 +1,16 @@
+.OrderSummary {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.OrderSummary ul{
+    list-style-type: none;
+    padding: 0px;
+}
+.OrderSummary .Buttons {
+    display: flex;
+    justify-content: space-between;
+
+}
