@@ -57,9 +57,6 @@ class BurgerBuilder extends Component {
     };
 
     addIngredientHandler = (type) => {
-        console.log(
-            '-----------------------------------------------------------'
-        );
 
         const updatedIngredients = {
             ...this.state.ingredients,
