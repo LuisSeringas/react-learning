@@ -21,4 +21,8 @@ const Modal = (props) => {
     );
 };
 
-export default Modal;
+function areEqual(prevProps, nextProps) {
+    return prevProps.isOnPurchase === nextProps.isOnPurchase;
+}
+
+export default React.memo(Modal, areEqual);
