@@ -22,7 +22,10 @@ const Modal = (props) => {
 };
 
 function areEqual(prevProps, nextProps) {
-    return prevProps.isOnPurchase === nextProps.isOnPurchase;
+    return (
+        prevProps.isOnPurchase === nextProps.isOnPurchase &&
+        prevProps.children === nextProps.children
+    );
 }
 
 export default React.memo(Modal, areEqual);

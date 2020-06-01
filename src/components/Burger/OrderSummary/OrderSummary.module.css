@@ -5,12 +5,11 @@
     align-items: center;
 }
 
-.OrderSummary ul{
+.OrderSummary ul {
     list-style-type: none;
     padding: 0px;
 }
 .OrderSummary .Buttons {
     display: flex;
     justify-content: space-between;
-
 }

@@ -1,25 +1,32 @@
 .Button {
     margin: 16px;
     font: inherit;
-    width: 150px;
+    width: 90px;
     height: 32px;
     color: whitesmoke;
     border-radius: 10px;
-    cursor: pointer
+    cursor: pointer;
 }
 
 .Success {
-    background-color:#f5a700;
+    background-color: #f5a700;
     border: 1px solid #f5a700;
 }
 
-.Unsuccess{
-    background-color:#a32020;
+.Unsuccess {
+    background-color: #a32020;
     border: 1px solid #a32020;
 }
 
 .Button:hover {
-    animation: shake 0.5s linear
+    animation: shake 0.5s linear;
+}
+
+@media (min-width: 850px) {
+    .Button {
+        width: 150px;
+        height: 32px;
+    }
 }
 
 @keyframes shake {
@@ -42,4 +49,3 @@
         transform: rotate(0deg);
     }
 }
-
