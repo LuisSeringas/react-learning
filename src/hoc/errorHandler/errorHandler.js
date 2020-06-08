@@ -28,8 +28,11 @@ const errorHandler = (WrappedComponent, dbAPI) => {
         });
 
         useEffect(() => {
-            dbAPI.interceptors.request.eject(reqInterceptor);
-            dbAPI.interceptors.response.eject(respInterceptor);
+            return () => {
+                dbAPI.interceptors.request.eject(reqInterceptor);
+                dbAPI.interceptors.response.eject(respInterceptor);
+                console.log('unmount: ', reqInterceptor, respInterceptor);
+            };
         }, [reqInterceptor, respInterceptor]);
 
         const closeErrorHandler = () => {
