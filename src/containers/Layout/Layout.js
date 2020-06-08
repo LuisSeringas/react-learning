@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Aux from '../../hoc/aux.js';
+import Aux from '../../hoc/Aux/Aux.js';
 import Styles from './Layout.module.css';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
@@ -18,14 +18,17 @@ class Layout extends Component {
 
     openSideDrawerHandler = () => {
         this.setState({
-            showSideDrawer: true
+            showSideDrawer: true,
         });
     };
 
     render() {
         return (
             <Aux>
-                <Toolbar toShow={!this.state.showSideDrawer} openSideDrawerHandler={this.openSideDrawerHandler}/>
+                <Toolbar
+                    toShow={!this.state.showSideDrawer}
+                    openSideDrawerHandler={this.openSideDrawerHandler}
+                />
                 <SideDrawer
                     show={this.state.showSideDrawer}
                     closeHandler={this.closeSideDrawerHandler}

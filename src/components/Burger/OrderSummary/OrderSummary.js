@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Aux from '../../../hoc/aux';
+import Aux from '../../../hoc/Aux/Aux';
 import Button from '../../UI/Button/Button';
-import WrapperWithCss from '../../../hoc/WrapperWithStyle';
+import WrapperWithCss from '../../../hoc/WrapperWithStyle/WrapperWithStyle';
 import Style from './OrderSummary.module.css';
 
 const OrderSummary = (props) => {

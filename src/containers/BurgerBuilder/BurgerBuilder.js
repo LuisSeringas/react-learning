@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 
-import Aux from '../../hoc/aux';
+import Aux from '../../hoc/Aux/Aux';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import BurgerIngredientTypes from '../../components/Burger/BurgerIngredient/BurgerIngredientTypes';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
-import db from '../../DB-API';
+import dbAPI from '../../DB-API';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import errorHandler from '../../hoc/errorHandler/errorHandler';
 
 class BurgerBuilder extends Component {
     constructor(props) {
@@ -16,26 +17,35 @@ class BurgerBuilder extends Component {
     }
 
     state = {
-        ingredients: {
-            salad: 0,
-            bacon: 0,
-            cheese: 0,
-            meat: 0,
-        },
+        ingredients: null,
         totalPrice:
             BurgerIngredientTypes.properties['topBread'].price +
             BurgerIngredientTypes.properties['bottomBread'].price,
         purchasable: false,
         onPurchase: false,
         onPurchaseLoading: false,
+        error: false,
     };
 
     componentDidMount() {
-        console.log('[BurguerBuilder.js] ComponentDidMount');
+        console.log('[BurgerBuilder.js] ComponentDidMount');
+
+        dbAPI
+            .get('/ingredients.json')
+            .then((response) => {
+                this.setState({
+                    ingredients: response.data,
+                });
+            })
+            .catch((err) => {
+                this.setState({
+                    error: true,
+                });
+            });
     }
 
     componentDidUpdate() {
-        console.log('[BurguerBuilder.js] ComponentDidUpdate');
+        console.log('[BurgerBuilder.js] ComponentDidUpdate');
     }
 
     purchaseHandler = () => {
@@ -120,18 +130,15 @@ class BurgerBuilder extends Component {
             orderNumber: '2342342-random',
         };
 
-        db.post('/orders.json', order)
+        dbAPI
+            .post('/orders.json', order)
             .then((response) => {
-                console.log(response);
-
                 this.setState({
                     onPurchaseLoading: false,
                     onPurchase: false,
                 });
             })
             .catch((error) => {
-                console.log(error);
-
                 this.setState({
                     onPurchaseLoading: false,
                     onPurchase: false,
@@ -144,14 +151,38 @@ class BurgerBuilder extends Component {
             ...this.state.ingredients,
         };
 
-        let orderSummary = (
-            <OrderSummary
-                ingredients={this.state.ingredients}
-                totalPrice={this.state.totalPrice}
-                confirmationHandler={this.purchaseConfirmationHandler}
-                cancelHandler={this.cancelPurchaseHandler}
-            />
+        let orderSummary = null;
+
+        let burger = this.state.error ? (
+            <p>Ingredients can't be loaded!!</p>
+        ) : (
+            <Spinner />
         );
+
+        if (this.state.ingredients) {
+            burger = (
+                <Aux>
+                    <Burger ingredients={this.state.ingredients} />
+                    <BuildControls
+                        totalPrice={this.state.totalPrice}
+                        addIngredientHandler={this.addIngredientHandler}
+                        removeIngredientHandler={this.removeIngredientHandler}
+                        disableControls={disableInfo}
+                        isPurchasable={this.state.purchasable}
+                        purchaseHandler={this.purchaseHandler}
+                    />
+                </Aux>
+            );
+
+            orderSummary = (
+                <OrderSummary
+                    ingredients={this.state.ingredients}
+                    totalPrice={this.state.totalPrice}
+                    confirmationHandler={this.purchaseConfirmationHandler}
+                    cancelHandler={this.cancelPurchaseHandler}
+                />
+            );
+        }
 
         if (this.state.onPurchaseLoading) {
             orderSummary = <Spinner />;
@@ -161,27 +192,18 @@ class BurgerBuilder extends Component {
             disableInfo[key] = disableInfo[key] <= 0;
         }
 
-        console.log(orderSummary);
         return (
             <Aux>
                 <Modal
-                    isOnPurchase={this.state.onPurchase}
+                    isToShow={this.state.onPurchase}
                     closeModalHandler={this.cancelPurchaseHandler}
                 >
                     {orderSummary}
                 </Modal>
-                <Burger ingredients={this.state.ingredients} />
-                <BuildControls
-                    totalPrice={this.state.totalPrice}
-                    addIngredientHandler={this.addIngredientHandler}
-                    removeIngredientHandler={this.removeIngredientHandler}
-                    disableControls={disableInfo}
-                    isPurchasable={this.state.purchasable}
-                    purchaseHandler={this.purchaseHandler}
-                />
+                {burger}
             </Aux>
         );
     }
 }
 
-export default BurgerBuilder;
+export default errorHandler(BurgerBuilder, dbAPI);
