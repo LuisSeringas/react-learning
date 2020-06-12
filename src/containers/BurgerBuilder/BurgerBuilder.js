@@ -9,6 +9,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import dbAPI from '../../DB-API';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import errorHandler from '../../hoc/errorHandler/errorHandler';
+import { queryAllByAltText } from '@testing-library/react';
 
 class BurgerBuilder extends Component {
     constructor(props) {
@@ -111,7 +112,23 @@ class BurgerBuilder extends Component {
     };
 
     purchaseConfirmationHandler = () => {
-        this.setState({
+        console.log(this.props);
+
+        const queryParams = [];
+
+        for (let ingredient in this.state.ingredients) {
+            queryParams.push(
+                encodeURIComponent(ingredient) +
+                    '=' +
+                    encodeURIComponent(this.state.ingredients[ingredient])
+            );
+        }
+
+        this.props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryParams.join('&'),
+        });
+        /*         this.setState({
             onPurchaseLoading: true,
         });
 
@@ -143,7 +160,7 @@ class BurgerBuilder extends Component {
                     onPurchaseLoading: false,
                     onPurchase: false,
                 });
-            });
+            }); */
     };
 
     render() {
