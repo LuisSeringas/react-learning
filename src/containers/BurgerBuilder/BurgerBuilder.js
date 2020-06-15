@@ -5,17 +5,12 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import BurgerIngredientTypes from '../../components/Burger/BurgerIngredient/BurgerIngredientTypes';
 import Modal from '../../components/UI/Modal/Modal';
-import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import OrderSummary from '../../components/Burger/Order/OrderSummary/OrderSummary';
 import dbAPI from '../../DB-API';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import errorHandler from '../../hoc/errorHandler/errorHandler';
 
 class BurgerBuilder extends Component {
-    constructor(props) {
-        super(props);
-        console.log('[BurgerBuilder.js] Constructor');
-    }
-
     state = {
         ingredients: null,
         totalPrice:
@@ -33,9 +28,21 @@ class BurgerBuilder extends Component {
         dbAPI
             .get('/ingredients.json')
             .then((response) => {
+                let totalPrice = this.state.totalPrice;
+
+                for (let [ingredient, value] of Object.entries(response.data)) {
+                    for (let i = 0; i < value; i++) {
+                        totalPrice +=
+                            BurgerIngredientTypes.properties[ingredient].price;
+                    }
+                }
+
                 this.setState({
                     ingredients: response.data,
+                    totalPrice: totalPrice,
                 });
+
+                this.updatePurchaseState(response.data);
             })
             .catch((err) => {
                 this.setState({
@@ -111,8 +118,6 @@ class BurgerBuilder extends Component {
     };
 
     purchaseConfirmationHandler = () => {
-        console.log(this.props);
-
         const queryParams = [];
 
         for (let ingredient in this.state.ingredients) {
