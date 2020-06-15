@@ -3,12 +3,12 @@ import React from 'react';
 import Styles from './NavigationItems.module.css';
 import NavigationItem from './NavigationItem/NavigationItem';
 
-const NavigationItems = () => (
+const NavigationItems = (props) => (
     <ul className={Styles.NavigationItems}>
-        <NavigationItem link={'/'} active>
+        <NavigationItem link={'/'} exact={props.exact}>
             Burger Builder
         </NavigationItem>
-        <NavigationItem link={'/'}>Checkout</NavigationItem>
+        <NavigationItem link={'/orders'}>Orders</NavigationItem>
     </ul>
 );
 
