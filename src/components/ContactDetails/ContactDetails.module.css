@@ -1,0 +1,24 @@
+.ContactDetails {
+    margin: 20px auto;
+    padding: 10px;
+    width: 80%;
+    text-align: center;
+    border: 2px solid #eee;
+    box-shadow: 0 2px 4px #ccc;
+    box-sizing: border-box;
+}
+
+.Form {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.Input {
+    display: block;
+    text-align: center;
+    width: 150px;
+    height: 32px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}

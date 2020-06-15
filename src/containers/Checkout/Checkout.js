@@ -1,22 +1,31 @@
 import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 
 import CheckoutSummary from '../../components/Burger/CheckoutSummary/CheckoutSummary';
+import ContactDetails from '../../components/ContactDetails/ContactDetails';
 
 class Checkout extends Component {
     state = {
         ingredients: null,
+        price: 0,
     };
 
     componentDidMount() {
         const queryParams = new URLSearchParams(this.props.location.search);
         const ingredients = {};
+        let price = 0;
 
-        for (let [ingredient, value] of queryParams.entries()) {
-            ingredients[ingredient] = value;
+        for (let [param, value] of queryParams.entries()) {
+            if (param === 'price') {
+                price = value;
+                continue;
+            }
+            ingredients[param] = value;
         }
 
         this.setState({
             ingredients: ingredients,
+            price: price,
         });
     }
     checkoutCancelHandler = () => {
@@ -27,12 +36,25 @@ class Checkout extends Component {
         this.props.history.replace('/checkout/contact-data');
     };
     render() {
+        console.log(this.state);
         const checkoutSummary = this.state.ingredients ? (
-            <CheckoutSummary
-                ingredients={this.state.ingredients}
-                cancelCheckout={this.checkoutCancelHandler}
-                continueCheckout={this.checkoutContinueHandler}
-            />
+            <React.Fragment>
+                <CheckoutSummary
+                    ingredients={this.state.ingredients}
+                    cancelCheckout={this.checkoutCancelHandler}
+                    continueCheckout={this.checkoutContinueHandler}
+                />
+                <Route
+                    path={this.props.match.url + '/contact-data'}
+                    render={(props) => (
+                        <ContactDetails
+                            ingredients={this.state.ingredients}
+                            price={this.state.price}
+                            {...props}
+                        />
+                    )}
+                />
+            </React.Fragment>
         ) : null;
 
         console.log(checkoutSummary);
