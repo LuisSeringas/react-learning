@@ -6,13 +6,10 @@ import errorHandler from '../../hoc/errorHandler/errorHandler';
 import Spinner from '../../components/UI/Spinner/Spinner';
 
 const Orders = (props) => {
-    const [loading, setLoading] = useState(false);
     const [orders, setOrders] = useState(null);
 
     //ComponentDidMount
     useEffect(() => {
-        setLoading(true);
-
         dbAPI
             .get('orders.json')
             .then((res) => {
@@ -25,11 +22,9 @@ const Orders = (props) => {
                     });
                 }
                 setOrders(fetchOrders);
-                setLoading(false);
-                console.log(fetchOrders);
             })
             .catch((err) => {
-                setLoading(false);
+                console.log(err);
             });
     }, []);
 

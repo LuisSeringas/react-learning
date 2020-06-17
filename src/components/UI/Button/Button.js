@@ -4,7 +4,11 @@ import Style from './Button.module.css';
 
 const Button = (props) => {
     return (
-        <button className={[Style.Button, Style[props.btnType]].join(' ')} onClick={props.onClick}>
+        <button
+            className={[Style.Button, Style[props.btnType]].join(' ')}
+            disabled={props.disabled}
+            onClick={props.onClick}
+        >
             {props.children}
         </button>
     );

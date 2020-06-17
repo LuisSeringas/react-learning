@@ -13,12 +13,3 @@
     flex-flow: column;
     align-items: center;
 }
-
-.Input {
-    display: block;
-    text-align: center;
-    width: 150px;
-    height: 32px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-}

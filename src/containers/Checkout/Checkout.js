@@ -36,7 +36,6 @@ class Checkout extends Component {
         this.props.history.replace('/checkout/contact-data');
     };
     render() {
-        console.log(this.state);
         const checkoutSummary = this.state.ingredients ? (
             <React.Fragment>
                 <CheckoutSummary
@@ -56,8 +55,6 @@ class Checkout extends Component {
                 />
             </React.Fragment>
         ) : null;
-
-        console.log(checkoutSummary);
 
         return checkoutSummary;
     }
