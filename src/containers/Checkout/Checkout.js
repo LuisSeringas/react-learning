@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import CheckoutSummary from '../../components/Burger/Order/CheckoutSummary/CheckoutSummary';
 import ContactDetails from '../../components/ContactDetails/ContactDetails';
 
 class Checkout extends Component {
     state = {
-        ingredients: null,
         price: 0,
     };
 
@@ -36,22 +36,16 @@ class Checkout extends Component {
         this.props.history.replace('/checkout/contact-data');
     };
     render() {
-        const checkoutSummary = this.state.ingredients ? (
+        const checkoutSummary = this.props.ingredients ? (
             <React.Fragment>
                 <CheckoutSummary
-                    ingredients={this.state.ingredients}
+                    ingredients={this.props.ingredients}
                     cancelCheckout={this.checkoutCancelHandler}
                     continueCheckout={this.checkoutContinueHandler}
                 />
                 <Route
                     path={this.props.match.url + '/contact-data'}
-                    render={(props) => (
-                        <ContactDetails
-                            ingredients={this.state.ingredients}
-                            price={this.state.price}
-                            {...props}
-                        />
-                    )}
+                    component={ContactDetails}
                 />
             </React.Fragment>
         ) : null;
@@ -60,4 +54,9 @@ class Checkout extends Component {
     }
 }
 
-export default Checkout;
+const mapStateToProps = (state) => {
+    return {
+        ingredients: state.ingredients,
+    };
+};
+export default connect(mapStateToProps)(Checkout);

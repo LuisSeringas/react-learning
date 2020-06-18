@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Styles from './ContactDetails.module.css';
+import { connect } from 'react-redux';
 
 import Button from '../UI/Button/Button';
 import dbAPI from '../../DB-API';
@@ -17,7 +18,6 @@ const orderFormShape = {
         validations: {
             required: true,
             minLength: 4,
-            maxLength: 6,
         },
         valid: false,
         touched: false,
@@ -211,4 +211,11 @@ const ContactDetails = (props) => {
     );
 };
 
-export default ContactDetails;
+const mapStateToProps = (state) => {
+    return {
+        ingredients: state.ingredients,
+        price: state.totalPrice,
+    };
+};
+
+export default connect(mapStateToProps)(ContactDetails);
