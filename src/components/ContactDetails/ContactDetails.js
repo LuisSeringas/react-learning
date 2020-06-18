@@ -44,8 +44,7 @@ const orderFormShape = {
         value: '',
         validations: {
             required: true,
-            minLength: 8,
-            maxLength: 8,
+            zipCode: true,
         },
         valid: false,
         touched: false,
@@ -72,6 +71,7 @@ const orderFormShape = {
         value: '',
         validations: {
             required: true,
+            email: true,
         },
         valid: false,
         touched: false,
@@ -172,6 +172,17 @@ const ContactDetails = (props) => {
 
         if (rules.maxLength) {
             isValid = inputField.value.length <= rules.maxLength && isValid;
+        }
+
+        if (rules.zipCode) {
+            const regex = /^(([0-9]{4})|([0-9]{5}))((?:-[0-9]{3})|(?:-[0-9]{4}))?$/;
+            isValid = regex.test(inputField.value) && isValid;
+        }
+
+        if (rules.email) {
+            const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+            isValid = regex.test(inputField.value) && isValid;
         }
 
         return isValid;
